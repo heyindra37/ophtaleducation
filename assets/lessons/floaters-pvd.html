@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memahami Floaters &amp; PVD — Edukasi Pasien Interaktif</title>
+  <link rel="stylesheet" href="./floaters.css" />
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    canvas {
+      display: block;
+      touch-action: manipulation;
+    }
+    .stage-btn.active {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+    .faq-content {
+      transition: max-height 0.25s ease, opacity 0.25s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0" aria-hidden="true">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+            Memahami Floaters &amp; PVD
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-500">
+            Panduan Visual Interaktif <em>Posterior Vitreous Detachment</em> untuk Pasien
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <a href="#faktor-risiko" class="hidden md:inline-flex px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">Faktor Risiko</a>
+        <a href="#epidemiologi" class="hidden md:inline-flex px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">Epidemiologi</a>
+        <a href="#pengobatan" class="hidden md:inline-flex px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">Pengobatan</a>
+        <button id="btnAutoPlay" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition">
+          <span id="autoPlayIcon">&#9654;</span>
+          <span id="autoPlayLabel">Putar Otomatis</span>
+        </button>
+        <a href="#tanda-bahaya" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition">
+          <span>&#9888;</span> Tanda Bahaya
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <!-- Stage Stepper Navigation -->
+    <section aria-label="Tahapan Patofisiologi" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-sky-700">Tahapan Perubahan di Dalam Mata</span>
+          <h2 id="stageTitle" class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">
+            Tahap 1: Mata Normal (Gel Vitreus Sehat)
+          </h2>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button id="btnPrev" type="button" class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            &larr; Sebelumnya
+          </button>
+          <button id="btnNext" type="button" class="px-3 py-1.5 rounded-lg bg-sky-600 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            Berikutnya &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Stage Pills -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
+        <button type="button" data-stage="1" class="stage-btn active text-left px-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium transition hover:border-sky-400">
+          <div class="font-semibold">1. Mata Normal</div>
+          <div class="text-[11px] opacity-80 truncate">Gel bening &amp; menempel erat</div>
+        </button>
+        <button type="button" data-stage="2" class="stage-btn text-left px-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium transition hover:border-sky-400">
+          <div class="font-semibold">2. Sineresis &amp; Floaters</div>
+          <div class="text-[11px] opacity-80 truncate">Gel mencair, serat menggumpal</div>
+        </button>
+        <button type="button" data-stage="3" class="stage-btn text-left px-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium transition hover:border-sky-400">
+          <div class="font-semibold">3. Pelepasan (PVD)</div>
+          <div class="text-[11px] opacity-80 truncate">Tarikan retina &amp; kilatan cahaya</div>
+        </button>
+        <button type="button" data-stage="4" class="stage-btn text-left px-3 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium transition hover:border-sky-400">
+          <div class="font-semibold">4. Hasil Akhir / Risiko</div>
+          <div class="text-[11px] opacity-80 truncate">Aman vs. robekan retina</div>
+        </button>
+      </div>
+
+      <!-- Stage Explanation Box -->
+      <div id="stageDescriptionBox" class="rounded-xl bg-slate-50 border border-slate-200 p-3.5 sm:p-4 text-sm text-slate-700 leading-relaxed">
+        <p id="stageDescription"></p>
+      </div>
+
+      <!-- Stage 4 Complication Toggle (visible only on Stage 4) -->
+      <div id="stage4ToggleWrap" class="hidden mt-3 flex flex-wrap items-center gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200">
+        <span class="text-xs sm:text-sm font-semibold text-amber-900 mr-2">Pilih Skenario Tahap 4:</span>
+        <button id="btnModeNormal" type="button" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-600 text-white shadow-sm transition">
+          &#10003; PVD Tanpa Komplikasi (Umum)
+        </button>
+        <button id="btnModeTear" type="button" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-rose-700 border border-rose-300 hover:bg-rose-50 transition">
+          &#9888; Komplikasi: Robekan Retina (10–15%)
+        </button>
+      </div>
+    </section>
+
+    <!-- Dual Interactive Canvas Simulation -->
+    <section aria-label="Simulasi Interaktif" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <!-- Left Panel: Eye Anatomy -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900">1. Kondisi di Dalam Bola Mata (Anatomi)</h3>
+            <p class="text-xs text-slate-500">Klik atau tekan tombol gerak mata untuk melihat bagaimana gel vitreus berayun.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnSaccade" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">
+              <span>&#8635;</span> Gerakkan Bola Mata
+            </button>
+            <button id="btnLightRays" type="button" aria-pressed="true" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold transition">
+              <span>&#9728;</span> Sinar &amp; Bayangan: Aktif
+            </button>
+          </div>
+        </div>
+
+        <div class="relative w-full h-72 sm:h-80 rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
+          <canvas id="anatomyCanvas" class="w-full h-full cursor-pointer"></canvas>
+        </div>
+
+        <!-- Legend -->
+        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-slate-600">
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-300/70 border border-sky-500 inline-block"></span> Gel Vitreus</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span> Retina (Lapisan Saraf)</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-slate-500 inline-block"></span> Gumpalan Kolagen (Floaters)</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-300 border border-amber-500 inline-block"></span> Tarikan / Kilatan (Photopsia)</span>
+        </div>
+      </div>
+
+      <!-- Right Panel: Patient Vision Simulation -->
+      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900">2. Apa yang Dilihat Pasien</h3>
+            <p class="text-xs text-slate-500">Bayangan jatuh di retina saat melihat latar terang atau gelap.</p>
+          </div>
+          <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100">
+            <button id="btnBgBright" type="button" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition">
+              Latar Terang
+            </button>
+            <button id="btnBgDark" type="button" class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+              Ruang Gelap
+            </button>
+          </div>
+        </div>
+
+        <div class="relative w-full h-72 sm:h-80 rounded-xl overflow-hidden border border-slate-200">
+          <canvas id="visionCanvas" class="w-full h-full cursor-pointer"></canvas>
+        </div>
+
+        <div id="visionCaption" class="mt-3 text-xs text-slate-600 bg-slate-50 rounded-lg p-2.5 border border-slate-200 leading-relaxed">
+          Pada mata normal, cahaya menembus gel vitreus yang jernih tanpa halangan sehingga pandangan bersih.
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. Faktor Risiko PVD & Floaters (Interaktif) -->
+    <section id="faktor-risiko" aria-label="Faktor Risiko PVD dan Floaters" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-700">Siapa yang Lebih Berisiko?</span>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Faktor Risiko PVD &amp; Floaters</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Pilih faktor risiko di bawah untuk melihat animasi pengaruhnya terhadap bola mata dan gel vitreus.</p>
+        </div>
+        <button id="btnResetRisk" type="button" class="self-start sm:self-auto px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+          Reset Pilihan
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Interactive Risk Factor Buttons -->
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="riskFactorGrid">
+          <button type="button" data-risk="age" class="risk-card text-left p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50/70 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">1. Usia &gt; 50 Tahun</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Utama</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Pencairan gel (<em>sineresis</em>) meningkat alami seiring usia.</p>
+          </button>
+
+          <button type="button" data-risk="myopia" class="risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">2. Rabun Jauh (Miopia)</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800">Dini</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Bola mata lebih panjang (&gt;30 mm) memicu PVD lebih awal.</p>
+          </button>
+
+          <button type="button" data-risk="cataract" class="risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">3. Pasca Operasi Katarak</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">~1/3 Kasus</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Fakoemulsifikasi mengubah dinamika cairan vitreus.</p>
+          </button>
+
+          <button type="button" data-risk="female" class="risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">4. Perempuan &amp; Menopause</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">OR 2,9&times;</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Penurunan estrogen mempercepat progresi PVD (&ge;60 thn).</p>
+          </button>
+
+          <button type="button" data-risk="trauma" class="risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">5. Trauma &amp; Radang (Uveitis)</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">Akut</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Benturan atau fibrosis radang menarik retina secara mendadak.</p>
+          </button>
+
+          <button type="button" data-risk="diabetes" class="risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs sm:text-sm font-bold text-slate-900">6. Diabetes &amp; Genetik</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Sistemik</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Retinopati diabetik, sindrom Stickler/Wagner/Marfan, RP.</p>
+          </button>
+        </div>
+
+        <!-- Animated Risk Visual Canvas -->
+        <div class="lg:col-span-5 bg-slate-900 rounded-xl p-3.5 text-white border border-slate-800">
+          <div class="relative w-full h-52 rounded-lg overflow-hidden bg-slate-950 border border-slate-800">
+            <canvas id="riskCanvas" class="w-full h-full"></canvas>
+          </div>
+          <div class="mt-3">
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="text-slate-300 font-medium">Percepatan Perubahan Vitreus:</span>
+              <span id="riskLevelBadge" class="font-bold text-indigo-300">Sedang (Proses Usia)</span>
+            </div>
+            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div id="riskMeterBar" class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: 55%"></div>
+            </div>
+            <p id="riskDetailText" class="text-xs text-slate-300 mt-2.5 leading-relaxed">
+              Setelah usia 50 tahun, jaringan kolagen-hialuronan mulai kolaps secara bertahap sehingga kantong cairan dan gumpalan floaters terbentuk.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Epidemiologi PVD & Floaters (Animasi Visual) -->
+    <section id="epidemiologi" aria-label="Epidemiologi PVD dan Floaters" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-teal-700">Data Populasi &amp; Statistik Klinis</span>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Epidemiologi: Seberapa Umum PVD &amp; Floaters?</h2>
+        </div>
+        <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100 self-start sm:self-auto">
+          <button type="button" id="btnEpiAge" class="px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition">
+            Berdasarkan Usia
+          </button>
+          <button type="button" id="btnEpiRisk" class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+            Statistik Klinis &amp; Risiko
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+        <!-- Animated 100-People Visual / Bar Chart Canvas -->
+        <div class="lg:col-span-6">
+          <div class="relative w-full h-64 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+            <canvas id="epiCanvas" class="w-full h-full"></canvas>
+          </div>
+          <div id="epiAgeControls" class="mt-3 flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold text-slate-600">Pilih Kelompok Usia:</span>
+            <button type="button" data-epi-age="39" class="epi-age-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50 transition">~39 Thn (Awal OCT)</button>
+            <button type="button" data-epi-age="50" class="epi-age-btn active-epi px-2.5 py-1 rounded-lg text-xs font-semibold bg-teal-600 text-white transition">&gt; 50 Thn (53%)</button>
+            <button type="button" data-epi-age="65" class="epi-age-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50 transition">66–86 Thn (66%)</button>
+            <button type="button" data-epi-age="75" class="epi-age-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50 transition">~75 Thn (Komplit)</button>
+          </div>
+        </div>
+
+        <!-- Key Epidemiological Highlights -->
+        <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-teal-50/70 border border-teal-200">
+            <div class="text-2xl font-bold text-teal-800">76%</div>
+            <div class="text-xs font-semibold text-teal-950 mt-0.5">Pernah Melihat Floaters</div>
+            <p class="text-xs text-teal-900/80 mt-1">Survei komunitas menunjukkan 33% di antaranya merasakan gangguan penglihatan nyata.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200">
+            <div class="text-2xl font-bold text-sky-800">64–89%</div>
+            <div class="text-xs font-semibold text-sky-950 mt-0.5">PVD pada Pasien Bergejala</div>
+            <p class="text-xs text-sky-900/80 mt-1">Mayoritas pasien yang datang dengan keluhan kilatan cahaya atau floaters baru.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200">
+            <div class="text-2xl font-bold text-amber-800">8–22%</div>
+            <div class="text-xs font-semibold text-amber-950 mt-0.5">Robekan Retina Awal</div>
+            <p class="text-xs text-amber-900/80 mt-1">Naik menjadi <strong>50–70%</strong> jika disertai perdarahan vitreus; 2–5% muncul tertunda (~42–51 hari).</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200">
+            <div class="text-2xl font-bold text-purple-800">3&times;</div>
+            <div class="text-xs font-semibold text-purple-950 mt-0.5">Diagnosis pada Perempuan</div>
+            <p class="text-xs text-purple-900/80 mt-1">Perempuan lebih sering terdiagnosis PVD (OR 2,9), namun laki-laki lebih sering perlu tindakan robekan retina.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Informasi Pengobatan & Adaptasi Alami Floaters -->
+    <section id="pengobatan" aria-label="Pengobatan dan Adaptasi Floaters" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Penanganan &amp; Perjalanan Gejala</span>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Bagaimana Pengobatan Floaters?</h2>
+        </div>
+        <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg self-start sm:self-auto">
+          <button type="button" data-tx-phase="0" class="tx-phase-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition">Hari 1</button>
+          <button type="button" data-tx-phase="1" class="tx-phase-btn px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition">Bulan 3 (Gravitasi)</button>
+          <button type="button" data-tx-phase="2" class="tx-phase-btn px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition">Bulan 6 (Adaptasi Otak)</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+        <!-- Animated Gravity & Neuroadaptation Canvas -->
+        <div class="lg:col-span-5">
+          <div class="relative w-full h-60 rounded-xl overflow-hidden border border-slate-200 bg-sky-50">
+            <canvas id="treatmentCanvas" class="w-full h-full"></canvas>
+          </div>
+          <p id="txCaption" class="text-xs text-slate-600 mt-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
+            <strong>Hari ke-1:</strong> Floaters berada di tengah sumbu penglihatan sehingga terasa sangat jelas dan mengganggu.
+          </p>
+        </div>
+
+        <!-- 3 Key Treatment Points -->
+        <div class="lg:col-span-7 space-y-3">
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Belum Ada Obat yang Menghilangkan Floaters</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mt-0.5 leading-relaxed">
+                Saat ini tidak ada pengobatan obat minum maupun obat tetes yang bisa benar-benar menghilangkan kondisi <em>floaters</em>. Setelah dokter memastikan retina aman, observasi adalah langkah utama (tindakan laser atau operasi vitrektomi hanya dipertimbangkan pada kasus sangat berat).
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Peran Tetes Mata &amp; Vitamin</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mt-0.5 leading-relaxed">
+                Tetes mata maupun vitamin yang diresepkan oleh dokter hanya bertindak sebagai terapi suportif untuk meredakan keluhan penyerta (misalnya mata kering) dan mendukung kesehatan mata, bukan untuk melarutkan <em>floaters</em>.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+            <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</div>
+            <div>
+              <h3 class="text-sm font-bold text-emerald-950">Mereda Alami: Gravitasi &amp; Adaptasi Otak</h3>
+              <p class="text-xs sm:text-sm text-emerald-900/90 mt-0.5 leading-relaxed">
+                Lama-kelamaan, <em>floaters</em> akan perlahan mereda dan terasa menghilang karena gumpalan tertarik ke bawah oleh <strong>gravitasi</strong> menjauhi pusat penglihatan, serta <strong>otak beradaptasi</strong> (<em>neuroadaptasi</em>) setelah mengetahui bahwa kondisi ini tidak berbahaya.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Red Flags & Clinical Guidance -->
+    <section id="tanda-bahaya" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="bg-rose-50/80 rounded-2xl border border-rose-200 p-5">
+        <div class="flex items-center gap-2.5 mb-3">
+          <span class="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-sm">!</span>
+          <h3 class="text-base font-bold text-rose-950">Kapan Harus Segera ke Dokter Mata? (Dalam 24 Jam)</h3>
+        </div>
+        <p class="text-xs sm:text-sm text-rose-900/90 mb-3">
+          Meskipun PVD umumnya merupakan proses penuaan alami yang tidak berbahaya, sekitar <strong>10–15%</strong> kasus PVD bergejala dapat disertai robekan retina. Segera periksakan mata jika muncul:
+        </p>
+        <ul class="space-y-2 text-xs sm:text-sm text-rose-950">
+          <li class="flex items-start gap-2">
+            <span class="text-rose-600 font-bold mt-0.5">&bull;</span>
+            <span><strong>Hujan floaters mendadak:</strong> Muncul puluhan bintik hitam/abu-abu baru secara tiba-tiba.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-rose-600 font-bold mt-0.5">&bull;</span>
+            <span><strong>Kilatan cahaya berulang:</strong> Seperti kilat atau lampu kamera di tepi penglihatan, terutama di tempat gelap.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-rose-600 font-bold mt-0.5">&bull;</span>
+            <span><strong>Tirai atau bayangan gelap:</strong> Ada bayangan gelap yang menutupi sebagian sisi penglihatan (tanda bahaya ablasio retina).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-rose-600 font-bold mt-0.5">&bull;</span>
+            <span><strong>Penurunan tajam penglihatan mendadak</strong> atau pandangan terasa berkabut gelap (dapat menandakan perdarahan vitreus).</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-base font-bold text-slate-900 mb-3">Pertanyaan yang Sering Diajukan Pasien</h3>
+        <div class="space-y-2" id="faqList">
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" class="faq-toggle w-full text-left px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-2">
+              <span>Mengapa floaters selalu lari saat saya mencoba melihatnya langsung?</span>
+              <span class="faq-arrow text-slate-400 transition-transform">&#9662;</span>
+            </button>
+            <div class="faq-panel hidden px-4 py-3 text-xs sm:text-sm text-slate-600 bg-white leading-relaxed">
+              Karena floaters melayang di dalam cairan vitreus yang memiliki kelembaman (inersia). Saat bola mata bergerak cepat ke arahnya, cairan dan gumpalan di dalamnya ikut bergeser sedikit lebih lambat sehingga bayangannya selalu menjauh dari titik fokus penglihatan.
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" class="faq-toggle w-full text-left px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-2">
+              <span>Apakah floaters akibat PVD bisa hilang sendiri?</span>
+              <span class="faq-arrow text-slate-400 transition-transform">&#9662;</span>
+            </button>
+            <div class="faq-panel hidden px-4 py-3 text-xs sm:text-sm text-slate-600 bg-white leading-relaxed">
+              Gumpalan kolagennya tidak benar-benar larut, tetapi seiring waktu (biasanya 3–6 bulan) posisinya perlahan turun menjauhi sumbu penglihatan dan otak belajar mengabaikannya (<em>neuroadaptasi</em>), sehingga tidak lagi mengganggu.
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" class="faq-toggle w-full text-left px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-2">
+              <span>Apakah PVD sama dengan Ablasio Retina (retina lepas)?</span>
+              <span class="faq-arrow text-slate-400 transition-transform">&#9662;</span>
+            </button>
+            <div class="faq-panel hidden px-4 py-3 text-xs sm:text-sm text-slate-600 bg-white leading-relaxed">
+              <strong>Berbeda.</strong> Pada PVD, yang terlepas adalah <em>gel vitreus</em> dari permukaan retina—ini proses penuaan yang dialami hampir 75% orang di usia 65 tahun. Ablasio retina adalah terlepasnya <em>lapisan saraf retina</em> itu sendiri dari dinding mata, yang merupakan kondisi darurat. Namun PVD dapat memicu robekan retina jika tarikannya terlalu kuat, sehingga pemeriksaan awal sangat penting.
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <button type="button" class="faq-toggle w-full text-left px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-2">
+              <span>Siapa yang lebih berisiko mengalami PVD lebih awal?</span>
+              <span class="faq-arrow text-slate-400 transition-transform">&#9662;</span>
+            </button>
+            <div class="faq-panel hidden px-4 py-3 text-xs sm:text-sm text-slate-600 bg-white leading-relaxed">
+              Selain faktor usia (umumnya di atas 50 tahun), PVD dapat terjadi lebih awal pada penderita rabun jauh tinggi (<em>miopia</em>), pasca operasi katarak, riwayat benturan/trauma mata, atau penderita diabetes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Medical References Footer -->
+    <footer class="text-xs text-slate-500 border-t border-slate-200 pt-4 pb-8 flex flex-wrap items-center justify-between gap-2">
+      <div>
+        Sumber medis:
+        <a href="https://www.ncbi.nlm.nih.gov/books/NBK563273/" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline">StatPearls: Posterior Vitreous Detachment</a> &middot;
+        <a href="https://www.ncbi.nlm.nih.gov/books/NBK470420/" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline">StatPearls: Vitreous Floaters</a> &middot;
+        <a href="https://www.aao.org/eye-health/diseases/what-is-posterior-vitreous-detachment" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline">American Academy of Ophthalmology (AAO)</a> &middot;
+        <a href="https://my.clevelandclinic.org/health/diseases/14413-posterior-vitreous-detachment" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline">Cleveland Clinic</a>
+      </div>
+      <div>Alat bantu edukasi klinis interaktif</div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // --- State ---
+      const state = {
+        stage: 1,
+        complicationMode: false, // false = normal PVD resolution, true = retinal tear
+        showLightRays: true,
+        bgMode: 'bright', // 'bright' | 'dark'
+        autoPlay: false,
+        autoPlayTimer: null,
+        eyeAngle: 0,
+        eyeVel: 0,
+        gelLag: 0,
+        gelVel: 0,
+        flashIntensity: 0,
+        time: 0
+      };
+
+      const STAGES = {
+        1: {
+          title: 'Tahap 1: Mata Normal (Gel Vitreus Sehat)',
+          desc: 'Rongga tengah bola mata diisi oleh <strong>gel vitreus</strong> bening (99% air, serat kolagen, dan asam hialuronat) yang tersusun rapi dan menempel rapat pada permukaan <strong>retina</strong>. Cahaya masuk tanpa halangan sehingga penglihatan jernih.',
+          visionCaption: 'Pada mata normal, cahaya menembus gel vitreus yang jernih tanpa halangan sehingga pandangan bersih.'
+        },
+        2: {
+          title: 'Tahap 2: Pencairan Gel (Sineresis) &amp; Munculnya Floaters',
+          desc: 'Seiring bertambahnya usia, gel vitreus perlahan mencair membentuk kantong-kantong cairan (<em>sineresis</em>). Serat kolagennya mulai kolaps dan menggumpal. Saat cahaya melewati gumpalan ini, terbentuklah <strong>bayangan di retina</strong> yang terlihat sebagai bintik atau benang melayang (<em>floaters</em>).',
+          visionCaption: 'Gumpalan serat kolagen menjatuhkan bayangan ke retina—terlihat seperti bintik, benang, atau jaring laba-laba yang paling jelas di latar terang.'
+        },
+        3: {
+          title: 'Tahap 3: Pelepasan Vitreus (PVD) &amp; Kilatan Cahaya (Photopsia)',
+          desc: 'Gel yang menyusut akhirnya mulai terlepas dari permukaan belakang retina (<em>Posterior Vitreous Detachment</em>). Saat terlepas dari saraf optik, terbentuk cincin melayang khas bernama <strong>Cincin Weiss</strong>. Jika gel masih menarik retina di titik yang menempel erat, tarikan mekanis ini memicu sinyal listrik yang dilihat pasien sebagai <strong>kilatan cahaya</strong>.',
+          visionCaption: 'Tampak cincin melayang (Cincin Weiss) disertai kilatan cahaya singkat di tepi penglihatan akibat tarikan gel pada retina (lebih jelas di ruang gelap).'
+        },
+        4: {
+          title: 'Tahap 4: Hasil Akhir — Pemulihan Normal vs. Risiko Robekan Retina',
+          descNormal: '<strong>PVD Tanpa Komplikasi (Sebagian Besar Kasus):</strong> Gel vitreus telah terlepas sempurna dari retina. Tarikan berhenti sehingga kilatan cahaya mereda, dan floaters perlahan turun serta diabaikan oleh otak dalam 3–6 bulan.',
+          descTear: '<strong>Komplikasi Robekan Retina (10–15% PVD Bergejala):</strong> Di area perlekatan yang terlalu erat, tarikan vitreus dapat merobek jaringan retina. Cairan dapat menyusup ke belakang retina dan menyebabkan <strong>Ablasio Retina</strong> (ditandai tirai gelap pada penglihatan).',
+          visionNormal: 'Kilatan cahaya berhenti karena tarikan sudah lepas. Floaters menetap lebih rendah dan perlahan tidak lagi mengganggu.',
+          visionTear: 'BAHAYA: Hujan floaters mendadak, kilatan terus-menerus, dan muncul bayangan tirai gelap dari tepi penglihatan akibat retina mulai terangkat.'
+        }
+      };
+
+      // --- DOM Elements ---
+      const anatomyCanvas = document.getElementById('anatomyCanvas');
+      const visionCanvas = document.getElementById('visionCanvas');
+      const aCtx = anatomyCanvas.getContext('2d');
+      const vCtx = visionCanvas.getContext('2d');
+
+      const stageTitleEl = document.getElementById('stageTitle');
+      const stageDescEl = document.getElementById('stageDescription');
+      const stage4ToggleWrap = document.getElementById('stage4ToggleWrap');
+      const visionCaptionEl = document.getElementById('visionCaption');
+
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const btnAutoPlay = document.getElementById('btnAutoPlay');
+      const autoPlayIcon = document.getElementById('autoPlayIcon');
+      const autoPlayLabel = document.getElementById('autoPlayLabel');
+      const btnSaccade = document.getElementById('btnSaccade');
+      const btnLightRays = document.getElementById('btnLightRays');
+      const btnBgBright = document.getElementById('btnBgBright');
+      const btnBgDark = document.getElementById('btnBgDark');
+      const btnModeNormal = document.getElementById('btnModeNormal');
+      const btnModeTear = document.getElementById('btnModeTear');
+      const stageBtns = document.querySelectorAll('.stage-btn');
+
+      // --- Floater Particles (shared model) ---
+      const floaters = [
+        { rx: -0.15, ry: -0.18, r: 4.5, type: 'dot', phase: 0.2 },
+        { rx: 0.08, ry: 0.12, r: 6.0, type: 'strand', phase: 1.4 },
+        { rx: -0.05, ry: 0.22, r: 3.5, type: 'dot', phase: 2.8 },
+        { rx: 0.18, ry: -0.10, r: 5.5, type: 'cobweb', phase: 3.9 },
+        { rx: 0.25, ry: 0.04, r: 9.0, type: 'weiss', phase: 0.7 },
+        // Extra shower particles for tear mode
+        { rx: 0.12, ry: -0.26, r: 3.0, type: 'shower', phase: 0.5 },
+        { rx: 0.22, ry: 0.18, r: 2.8, type: 'shower', phase: 1.9 },
+        { rx: -0.20, ry: 0.06, r: 3.2, type: 'shower', phase: 3.1 },
+        { rx: 0.02, ry: -0.28, r: 2.6, type: 'shower', phase: 4.4 },
+        { rx: 0.28, ry: -0.18, r: 3.0, type: 'shower', phase: 5.2 }
+      ];
+
+      // --- Canvas Sizing ---
+      function resizeCanvas(canvas) {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(240, Math.floor(rect.width));
+        const h = Math.max(200, Math.floor(rect.height));
+        if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+          canvas.width = w * dpr;
+          canvas.height = h * dpr;
+        }
+        return { w, h, dpr };
+      }
+
+      // --- UI Update ---
+      function updateUI() {
+        const s = state.stage;
+        const info = STAGES[s];
+        stageTitleEl.innerHTML = info.title;
+
+        if (s === 4) {
+          stage4ToggleWrap.classList.remove('hidden');
+          stageDescEl.innerHTML = state.complicationMode ? info.descTear : info.descNormal;
+          visionCaptionEl.textContent = state.complicationMode ? info.visionTear : info.visionNormal;
+        } else {
+          stage4ToggleWrap.classList.add('hidden');
+          stageDescEl.innerHTML = info.desc;
+          visionCaptionEl.textContent = info.visionCaption;
+        }
+
+        stageBtns.forEach(btn => {
+          const bs = Number(btn.dataset.stage);
+          btn.classList.toggle('active', bs === s);
+        });
+
+        btnPrev.disabled = s === 1;
+        btnNext.disabled = s === 4;
+
+        // Stage 4 toggle styling
+        if (state.complicationMode) {
+          btnModeNormal.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-50 transition';
+          btnModeTear.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-rose-600 text-white shadow-sm transition';
+        } else {
+          btnModeNormal.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-600 text-white shadow-sm transition';
+          btnModeTear.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-rose-700 border border-rose-300 hover:bg-rose-50 transition';
+        }
+
+        // Light rays button
+        btnLightRays.setAttribute('aria-pressed', String(state.showLightRays));
+        if (state.showLightRays) {
+          btnLightRays.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold transition';
+          btnLightRays.innerHTML = '<span>&#9728;</span> Sinar &amp; Bayangan: Aktif';
+        } else {
+          btnLightRays.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 border border-slate-300 text-xs font-medium transition';
+          btnLightRays.innerHTML = '<span>&#9728;</span> Sinar &amp; Bayangan: Mati';
+        }
+
+        // Bg mode buttons
+        if (state.bgMode === 'bright') {
+          btnBgBright.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition';
+          btnBgDark.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+        } else {
+          btnBgBright.className = 'px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+          btnBgDark.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-white shadow-sm transition';
+        }
+      }
+
+      function setStage(newStage) {
+        state.stage = Math.max(1, Math.min(4, newStage));
+        if (state.stage === 3 || (state.stage === 4 && state.complicationMode)) {
+          state.flashIntensity = 1.0;
+        }
+        updateUI();
+      }
+
+      function triggerSaccade() {
+        const dir = Math.random() > 0.5 ? 1 : -1;
+        state.eyeVel = dir * 0.24;
+        if (state.stage === 3 || (state.stage === 4 && state.complicationMode)) {
+          state.flashIntensity = 1.0;
+        }
+      }
+
+      function toggleAutoPlay() {
+        state.autoPlay = !state.autoPlay;
+        if (state.autoPlay) {
+          autoPlayIcon.innerHTML = '&#9646;&#9646;';
+          autoPlayLabel.textContent = 'Jeda';
+          state.autoPlayTimer = setInterval(() => {
+            if (state.stage < 4) {
+              setStage(state.stage + 1);
+            } else if (!state.complicationMode) {
+              state.complicationMode = true;
+              state.flashIntensity = 1.0;
+              updateUI();
+            } else {
+              state.complicationMode = false;
+              setStage(1);
+            }
+            triggerSaccade();
+          }, 5500);
+        } else {
+          autoPlayIcon.innerHTML = '&#9654;';
+          autoPlayLabel.textContent = 'Putar Otomatis';
+          if (state.autoPlayTimer) {
+            clearInterval(state.autoPlayTimer);
+            state.autoPlayTimer = null;
+          }
+        }
+      }
+
+      // --- Event Listeners ---
+      stageBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (state.autoPlay) toggleAutoPlay();
+          setStage(Number(btn.dataset.stage));
+        });
+      });
+
+      btnPrev.addEventListener('click', () => {
+        if (state.autoPlay) toggleAutoPlay();
+        setStage(state.stage - 1);
+      });
+
+      btnNext.addEventListener('click', () => {
+        if (state.autoPlay) toggleAutoPlay();
+        setStage(state.stage + 1);
+      });
+
+      btnAutoPlay.addEventListener('click', toggleAutoPlay);
+      btnSaccade.addEventListener('click', triggerSaccade);
+      anatomyCanvas.addEventListener('click', triggerSaccade);
+      visionCanvas.addEventListener('click', triggerSaccade);
+
+      btnLightRays.addEventListener('click', () => {
+        state.showLightRays = !state.showLightRays;
+        updateUI();
+      });
+
+      btnBgBright.addEventListener('click', () => {
+        state.bgMode = 'bright';
+        updateUI();
+      });
+
+      btnBgDark.addEventListener('click', () => {
+        state.bgMode = 'dark';
+        updateUI();
+      });
+
+      btnModeNormal.addEventListener('click', () => {
+        state.complicationMode = false;
+        state.flashIntensity = 0;
+        updateUI();
+      });
+
+      btnModeTear.addEventListener('click', () => {
+        state.complicationMode = true;
+        state.flashIntensity = 1.0;
+        updateUI();
+      });
+
+      // FAQ Accordion
+      document.querySelectorAll('.faq-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.nextElementSibling;
+          const arrow = btn.querySelector('.faq-arrow');
+          const isHidden = panel.classList.contains('hidden');
+          panel.classList.toggle('hidden', !isHidden);
+          arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+      });
+
+      // --- Drawing: Anatomy Canvas ---
+      function drawAnatomy(w, h, dpr) {
+        const ctx = aCtx;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+
+        // Background gradient
+        const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+        bgGrad.addColorStop(0, '#0f172a');
+        bgGrad.addColorStop(1, '#1e293b');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w * 0.52;
+        const cy = h * 0.5;
+        const R = Math.min(w * 0.34, h * 0.40);
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(state.eyeAngle);
+
+        // Optic nerve stalk on posterior right
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.moveTo(R * 0.88, -R * 0.14);
+        ctx.lineTo(R * 1.38, -R * 0.22);
+        ctx.lineTo(R * 1.38, R * 0.12);
+        ctx.lineTo(R * 0.88, R * 0.08);
+        ctx.closePath();
+        ctx.fill();
+
+        // Outer sclera
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(0, 0, R, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cornea bulge on left
+        ctx.fillStyle = '#bae6fd';
+        ctx.beginPath();
+        ctx.ellipse(-R * 0.92, 0, R * 0.24, R * 0.46, 0, Math.PI * 0.5, Math.PI * 1.5);
+        ctx.fill();
+        ctx.strokeStyle = '#7dd3fc';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Inner cavity (choroid/dark base)
+        const innerR = R * 0.90;
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Retina lining (yellow-orange arc from -130 deg to +130 deg)
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = Math.max(4, R * 0.055);
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR * 0.96, -Math.PI * 0.72, Math.PI * 0.72);
+        ctx.stroke();
+
+        // If Stage 4 complication: draw retinal tear & subretinal fluid pocket at upper-right periphery
+        if (state.stage === 4 && state.complicationMode) {
+          // Subretinal fluid lift
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+          ctx.beginPath();
+          ctx.arc(R * 0.42, -R * 0.65, R * 0.24, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Torn flap
+          ctx.strokeStyle = '#fb7185';
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.moveTo(R * 0.25, -R * 0.80);
+          ctx.quadraticCurveTo(R * 0.36, -R * 0.62, R * 0.48, -R * 0.68);
+          ctx.stroke();
+        }
+
+        // Vitreous gel body (depends on stage)
+        const gelRadius = innerR * 0.93;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(0, 0, gelRadius, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Retrohyaloid watery space (visible in stage 3 & 4)
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(-R, -R, R * 2, R * 2);
+
+        // Gel shape detaching from posterior wall
+        let detachOffset = 0;
+        if (state.stage === 3) detachOffset = R * 0.34;
+        if (state.stage === 4) detachOffset = state.complicationMode ? R * 0.38 : R * 0.50;
+
+        ctx.save();
+        ctx.rotate(state.gelLag);
+
+        ctx.beginPath();
+        if (state.stage <= 2) {
+          ctx.arc(0, 0, gelRadius, 0, Math.PI * 2);
+        } else {
+          // Left side attached at vitreous base, right side pulled inward
+          ctx.arc(0, 0, gelRadius, Math.PI * 0.58, Math.PI * 1.42);
+          if (state.stage === 3 || (state.stage === 4 && state.complicationMode)) {
+            // Still tethered at upper-right periphery (traction point!)
+            ctx.bezierCurveTo(
+              R * 0.10, -R * 0.72,
+              R * 0.38, -R * 0.78,
+              R * 0.42, -R * 0.72
+            );
+            ctx.bezierCurveTo(
+              R * 0.25, -R * 0.35,
+              R * 0.25 - detachOffset * 0.4, R * 0.15,
+              -R * 0.18, gelRadius * 0.92
+            );
+          } else {
+            // Cleanly detached posterior hyaloid
+            ctx.quadraticCurveTo(R * 0.25 - detachOffset * 0.5, 0, -R * 0.18, gelRadius * 0.92);
+          }
+          ctx.closePath();
+        }
+
+        const gelGrad = ctx.createRadialGradient(-R * 0.15, 0, R * 0.1, 0, 0, R);
+        gelGrad.addColorStop(0, 'rgba(125, 211, 252, 0.30)');
+        gelGrad.addColorStop(1, 'rgba(56, 189, 248, 0.16)');
+        ctx.fillStyle = gelGrad;
+        ctx.fill();
+
+        // Posterior hyaloid membrane border
+        if (state.stage >= 3) {
+          ctx.strokeStyle = 'rgba(186, 230, 253, 0.85)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        // Syneresis fluid pockets in Stage 2+
+        if (state.stage >= 2) {
+          ctx.fillStyle = 'rgba(14, 165, 233, 0.18)';
+          ctx.beginPath();
+          ctx.ellipse(-R * 0.08, -R * 0.25, R * 0.22, R * 0.14, 0.3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(R * 0.05, R * 0.22, R * 0.18, R * 0.12, -0.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Draw collagen clumps / floaters inside vitreous
+        if (state.stage >= 2) {
+          floaters.forEach((f) => {
+            if (f.type === 'weiss' && state.stage < 3) return;
+            if (f.type === 'shower' && !(state.stage === 4 && state.complicationMode)) return;
+
+            const wobbleX = Math.sin(state.time * 1.4 + f.phase) * 3;
+            const wobbleY = Math.cos(state.time * 1.1 + f.phase) * 3;
+            let fx = f.rx * R + wobbleX;
+            let fy = f.ry * R + wobbleY;
+
+            if (state.stage === 4 && !state.complicationMode) {
+              fy += R * 0.14; // floaters settle slightly lower over time
+            }
+
+            ctx.save();
+            ctx.translate(fx, fy);
+            if (f.type === 'weiss') {
+              ctx.strokeStyle = '#e2e8f0';
+              ctx.lineWidth = 2.5;
+              ctx.beginPath();
+              ctx.ellipse(0, 0, f.r, f.r * 0.72, 0.4, 0, Math.PI * 2);
+              ctx.stroke();
+            } else if (f.type === 'strand' || f.type === 'cobweb') {
+              ctx.strokeStyle = 'rgba(203, 213, 225, 0.85)';
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(-f.r, -f.r * 0.4);
+              ctx.quadraticCurveTo(0, f.r * 0.6, f.r, -f.r * 0.2);
+              ctx.stroke();
+            } else {
+              ctx.fillStyle = f.type === 'shower' ? 'rgba(248, 113, 113, 0.9)' : 'rgba(203, 213, 225, 0.85)';
+              ctx.beginPath();
+              ctx.arc(0, 0, f.r * 0.55, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          });
+        }
+
+        ctx.restore(); // end gelLag
+        ctx.restore(); // end vitreous clip
+
+        // Light rays & shadows cast on retina
+        if (state.showLightRays) {
+          const rayYPositions = [-R * 0.24, 0, R * 0.24];
+          rayYPositions.forEach((ry, idx) => {
+            ctx.strokeStyle = 'rgba(253, 224, 71, 0.35)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath();
+            ctx.moveTo(-R * 1.25, ry);
+            ctx.lineTo(-R * 0.66, ry * 0.72);
+            ctx.lineTo(innerR * 0.92, ry * 0.28);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // In Stage 2+, middle rays cast shadows on the retina
+            if (state.stage >= 2 && idx === 1) {
+              ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+              ctx.beginPath();
+              ctx.arc(innerR * 0.94, ry * 0.28, 5.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          });
+        }
+
+        // Iris & Crystalline Lens on the left
+        ctx.fillStyle = '#0ea5e9';
+        ctx.fillRect(-R * 0.78, -R * 0.52, R * 0.08, R * 0.30);
+        ctx.fillRect(-R * 0.78, R * 0.22, R * 0.08, R * 0.30);
+
+        ctx.fillStyle = 'rgba(224, 242, 254, 0.78)';
+        ctx.beginPath();
+        ctx.ellipse(-R * 0.62, 0, R * 0.13, R * 0.30, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#7dd3fc';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Traction sparks (Photopsia) at upper-right retina in Stage 3 or Stage 4 Complication
+        if ((state.stage === 3 || (state.stage === 4 && state.complicationMode)) && state.flashIntensity > 0.05) {
+          const sx = R * 0.40;
+          const sy = -R * 0.74;
+          ctx.save();
+          ctx.globalAlpha = Math.min(1, state.flashIntensity);
+          ctx.fillStyle = '#fef08a';
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const ang = (i * Math.PI) / 4 + state.time * 4;
+            const rad = i % 2 === 0 ? 15 : 6;
+            const px = sx + Math.cos(ang) * rad;
+            const py = sy + Math.sin(ang) * rad;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.restore(); // end eyeAngle & translate
+
+        // Labels (fixed horizontal so always readable)
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillText('Kornea & Lensa', Math.max(10, cx - R * 1.18), cy - R * 0.72);
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillText('Retina', cx + R * 0.62, cy + R * 0.76);
+        ctx.fillStyle = '#fde047';
+        ctx.fillText('Saraf Optik', cx + R * 0.92, cy - R * 0.25);
+
+        if (state.stage === 3) {
+          ctx.fillStyle = '#fef08a';
+          ctx.fillText('Titik Tarikan (Kilatan)', cx + R * 0.12, cy - R * 0.94);
+        } else if (state.stage === 4 && state.complicationMode) {
+          ctx.fillStyle = '#fda4af';
+          ctx.fillText('Robekan Retina!', cx + R * 0.18, cy - R * 0.94);
+        } else if (state.stage >= 2) {
+          ctx.fillStyle = '#93c5fd';
+          ctx.fillText('Gumpalan Kolagen', cx - R * 0.35, cy + R * 0.85);
+        }
+
+        ctx.restore();
+      }
+
+      // --- Drawing: Patient Vision Canvas ---
+      function drawVision(w, h, dpr) {
+        const ctx = vCtx;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+
+        // Background
+        if (state.bgMode === 'bright') {
+          const sky = ctx.createLinearGradient(0, 0, 0, h);
+          sky.addColorStop(0, '#e0f2fe');
+          sky.addColorStop(1, '#f8fafc');
+          ctx.fillStyle = sky;
+          ctx.fillRect(0, 0, w, h);
+
+          // Soft cloud silhouettes
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+          ctx.beginPath();
+          ctx.arc(w * 0.25, h * 0.32, 34, 0, Math.PI * 2);
+          ctx.arc(w * 0.33, h * 0.30, 42, 0, Math.PI * 2);
+          ctx.arc(w * 0.42, h * 0.33, 30, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          const dark = ctx.createRadialGradient(w * 0.5, h * 0.5, 20, w * 0.5, h * 0.5, w * 0.7);
+          dark.addColorStop(0, '#1e293b');
+          dark.addColorStop(1, '#020617');
+          ctx.fillStyle = dark;
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        // Floaters in patient view
+        if (state.stage >= 2) {
+          const shiftX = -state.gelLag * w * 0.9;
+          const baseAlpha = state.bgMode === 'bright' ? 0.55 : 0.22;
+
+          floaters.forEach((f) => {
+            if (f.type === 'weiss' && state.stage < 3) return;
+            if (f.type === 'shower' && !(state.stage === 4 && state.complicationMode)) return;
+
+            let px = w * 0.5 + f.rx * w * 1.15 + shiftX + Math.sin(state.time * 1.3 + f.phase) * 6;
+            let py = h * 0.5 + f.ry * h * 1.15 + Math.cos(state.time * 1.0 + f.phase) * 6;
+            if (state.stage === 4 && !state.complicationMode) {
+              py += h * 0.14;
+            }
+
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.globalAlpha = baseAlpha;
+            const color = state.bgMode === 'bright' ? '#334155' : '#94a3b8';
+
+            if (f.type === 'weiss') {
+              ctx.strokeStyle = color;
+              ctx.lineWidth = 3.5;
+              ctx.beginPath();
+              ctx.ellipse(0, 0, 16, 12, 0.35, 0, Math.PI * 2);
+              ctx.stroke();
+            } else if (f.type === 'strand' || f.type === 'cobweb') {
+              ctx.strokeStyle = color;
+              ctx.lineWidth = 2.5;
+              ctx.beginPath();
+              ctx.moveTo(-14, -8);
+              ctx.quadraticCurveTo(2, 10, 16, -4);
+              ctx.stroke();
+            } else {
+              ctx.fillStyle = color;
+              ctx.beginPath();
+              ctx.arc(0, 0, f.type === 'shower' ? 3.5 : 5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          });
+        }
+
+        // Peripheral photopsia arc flash
+        if ((state.stage === 3 || (state.stage === 4 && state.complicationMode)) && state.flashIntensity > 0.05) {
+          ctx.save();
+          const boost = state.bgMode === 'dark' ? 1.0 : 0.65;
+          ctx.globalAlpha = Math.min(1, state.flashIntensity * boost);
+          ctx.strokeStyle = '#fef08a';
+          ctx.lineWidth = 7;
+          ctx.lineCap = 'round';
+          ctx.shadowColor = '#facc15';
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(w * 0.5, h * 0.5, Math.min(w, h) * 0.42, -Math.PI * 0.28, Math.PI * 0.15);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Dark curtain shadow in Stage 4 Complication (Retinal Detachment)
+        if (state.stage === 4 && state.complicationMode) {
+          const curtainGrad = ctx.createLinearGradient(w * 0.58, h * 0.25, w, h * 0.75);
+          curtainGrad.addColorStop(0, 'rgba(2, 6, 23, 0)');
+          curtainGrad.addColorStop(0.45, 'rgba(2, 6, 23, 0.75)');
+          curtainGrad.addColorStop(1, 'rgba(2, 6, 23, 0.96)');
+          ctx.fillStyle = curtainGrad;
+          ctx.beginPath();
+          ctx.moveTo(w * 0.55, 0);
+          ctx.lineTo(w, 0);
+          ctx.lineTo(w, h);
+          ctx.lineTo(w * 0.72, h);
+          ctx.quadraticCurveTo(w * 0.58, h * 0.52, w * 0.55, 0);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = '#fda4af';
+          ctx.font = '600 12px Inter, sans-serif';
+          ctx.fillText('Bayangan Tirai Gelap', w * 0.63, h * 0.52);
+        }
+
+        // Subtle frame label
+        ctx.fillStyle = state.bgMode === 'bright' ? 'rgba(15, 23, 42, 0.6)' : 'rgba(226, 232, 240, 0.75)';
+        ctx.font = '500 11px Inter, sans-serif';
+        ctx.fillText('Simulasi Pandangan Pasien', 12, 20);
+
+        ctx.restore();
+      }
+
+      // --- Main Animation Loop ---
+      let lastTs = performance.now();
+      function animate(now) {
+        const dt = Math.min(0.05, (now - lastTs) / 1000);
+        lastTs = now;
+        state.time += dt;
+
+        // Spring physics for eye rotation (saccade)
+        const eyeSpring = -18 * state.eyeAngle - 5.5 * state.eyeVel;
+        state.eyeVel += eyeSpring * dt;
+        state.eyeAngle += state.eyeVel * dt;
+
+        // Vitreous gel lags behind eye movement (inertia!)
+        const gelSpring = 9 * (state.eyeAngle - state.gelLag) - 3.2 * state.gelVel;
+        state.gelVel += gelSpring * dt;
+        state.gelLag += state.gelVel * dt;
+
+        // Flash decay
+        if (state.flashIntensity > 0) {
+          state.flashIntensity = Math.max(0, state.flashIntensity - dt * 0.85);
+        }
+        // Periodic subtle flash in Stage 3 / Tear mode
+        if ((state.stage === 3 || (state.stage === 4 && state.complicationMode)) && Math.random() < 0.008) {
+          state.flashIntensity = 0.85;
+        }
+
+        const aSize = resizeCanvas(anatomyCanvas);
+        const vSize = resizeCanvas(visionCanvas);
+        const rSize = resizeCanvas(riskCanvas);
+        const eSize = resizeCanvas(epiCanvas);
+        const tSize = resizeCanvas(treatmentCanvas);
+        drawAnatomy(aSize.w, aSize.h, aSize.dpr);
+        drawVision(vSize.w, vSize.h, vSize.dpr);
+        drawRiskCanvas(rSize.w, rSize.h, rSize.dpr);
+        drawEpiCanvas(eSize.w, eSize.h, eSize.dpr);
+        drawTreatmentCanvas(tSize.w, tSize.h, tSize.dpr);
+
+        requestAnimationFrame(animate);
+      }
+
+      // --- New Interactive Sections State & Canvases ---
+      const riskCanvas = document.getElementById('riskCanvas');
+      const epiCanvas = document.getElementById('epiCanvas');
+      const treatmentCanvas = document.getElementById('treatmentCanvas');
+      const rCtx = riskCanvas.getContext('2d');
+      const eCtx = epiCanvas.getContext('2d');
+      const tCtx = treatmentCanvas.getContext('2d');
+
+      const RISK_DATA = {
+        age: {
+          label: 'Sedang–Tinggi (Proses Usia)',
+          pct: 60,
+          color: '#6366f1',
+          detail: 'Setelah usia 50 tahun, jaringan kolagen-hialuronan mulai kolaps secara bertahap sehingga kantong cairan (sineresis) dan gumpalan floaters terbentuk.'
+        },
+        myopia: {
+          label: 'Tinggi (Miopia / Mata Panjang)',
+          pct: 82,
+          color: '#0ea5e9',
+          detail: 'Panjang aksial bola mata > 30 mm menyebabkan degenerasi vitreus dini (myopic vitreopathy) dan penipisan retina perifer sehingga PVD terjadi lebih awal.'
+        },
+        cataract: {
+          label: 'Meningkat Pascaoperasi',
+          pct: 70,
+          color: '#f59e0b',
+          detail: 'Sekitar sepertiga mata pasca operasi katarak (fakoemulsifikasi) mengalami PVD parsial atau komplit akibat perubahan dinamika cairan vitreus.'
+        },
+        female: {
+          label: 'Progresi Lebih Cepat (OR 2,9x)',
+          pct: 68,
+          color: '#a855f7',
+          detail: 'Perempuan usia >= 60 tahun dan pascamenopause memiliki progresi PVD lebih cepat yang dikaitkan dengan penurunan hormon estrogen.'
+        },
+        trauma: {
+          label: 'Waspada Tinggi (Risiko Robekan)',
+          pct: 92,
+          color: '#f43f5e',
+          detail: 'Trauma benturan atau radang intraokular (uveitis) memicu gaya tarik mendadak atau fibrosis vitreus yang berisiko merobek retina.'
+        },
+        diabetes: {
+          label: 'Risiko Adhesi Abnormal',
+          pct: 75,
+          color: '#10b981',
+          detail: 'Retinopati diabetik dan kelainan jaringan ikat genetik (Stickler, Wagner, Marfan) mengubah kekuatan perlekatan antara vitreus dan retina.'
+        }
+      };
+
+      const extraState = {
+        activeRisk: 'age',
+        epiMode: 'age', // 'age' | 'clinical'
+        epiAge: 50,
+        epiAnimProgress: 1,
+        txPhase: 0 // 0: Day 1, 1: Month 3, 2: Month 6
+      };
+
+      const riskCards = document.querySelectorAll('.risk-card');
+      const riskLevelBadge = document.getElementById('riskLevelBadge');
+      const riskMeterBar = document.getElementById('riskMeterBar');
+      const riskDetailText = document.getElementById('riskDetailText');
+      const btnResetRisk = document.getElementById('btnResetRisk');
+
+      function selectRisk(key) {
+        extraState.activeRisk = key;
+        const d = RISK_DATA[key];
+        riskLevelBadge.textContent = d.label;
+        riskMeterBar.style.width = d.pct + '%';
+        riskMeterBar.style.backgroundColor = d.color;
+        riskDetailText.textContent = d.detail;
+
+        riskCards.forEach(c => {
+          const isMatch = c.dataset.risk === key;
+          c.className = isMatch
+            ? 'risk-card text-left p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50/70 transition'
+            : 'risk-card text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition';
+        });
+      }
+
+      riskCards.forEach(c => c.addEventListener('click', () => selectRisk(c.dataset.risk)));
+      btnResetRisk.addEventListener('click', () => selectRisk('age'));
+
+      // Epidemiology controls
+      const btnEpiAge = document.getElementById('btnEpiAge');
+      const btnEpiRisk = document.getElementById('btnEpiRisk');
+      const epiAgeControls = document.getElementById('epiAgeControls');
+      const epiAgeBtns = document.querySelectorAll('.epi-age-btn');
+
+      function setEpiMode(mode) {
+        extraState.epiMode = mode;
+        extraState.epiAnimProgress = 0;
+        if (mode === 'age') {
+          btnEpiAge.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition';
+          btnEpiRisk.className = 'px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+          epiAgeControls.classList.remove('hidden');
+        } else {
+          btnEpiRisk.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition';
+          btnEpiAge.className = 'px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+          epiAgeControls.classList.add('hidden');
+        }
+      }
+
+      btnEpiAge.addEventListener('click', () => setEpiMode('age'));
+      btnEpiRisk.addEventListener('click', () => setEpiMode('clinical'));
+
+      epiAgeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          extraState.epiAge = Number(btn.dataset.epiAge);
+          extraState.epiAnimProgress = 0;
+          epiAgeBtns.forEach(b => {
+            const active = b === btn;
+            b.className = active
+              ? 'epi-age-btn active-epi px-2.5 py-1 rounded-lg text-xs font-semibold bg-teal-600 text-white transition'
+              : 'epi-age-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50 transition';
+          });
+        });
+      });
+
+      // Treatment phase controls
+      const txPhaseBtns = document.querySelectorAll('.tx-phase-btn');
+      const txCaption = document.getElementById('txCaption');
+      const TX_CAPTIONS = {
+        0: '<strong>Hari ke-1:</strong> Floaters berada di tengah sumbu penglihatan sehingga terasa sangat jelas dan mengganggu.',
+        1: '<strong>Bulan ke-3 (Efek Gravitasi):</strong> Gumpalan kolagen perlahan turun ke bagian bawah bola mata, menjauhi pusat fokus.',
+        2: '<strong>Bulan ke-6 (Neuroadaptasi Otak):</strong> Otak mengenali bayangan ini tidak berbahaya dan menyaringnya keluar dari kesadaran visual.'
+      };
+
+      txPhaseBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          extraState.txPhase = Number(btn.dataset.txPhase);
+          txCaption.innerHTML = TX_CAPTIONS[extraState.txPhase];
+          txPhaseBtns.forEach(b => {
+            const active = b === btn;
+            b.className = active
+              ? 'tx-phase-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition'
+              : 'tx-phase-btn px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+          });
+        });
+      });
+
+      // Draw Risk Canvas
+      function drawRiskCanvas(w, h, dpr) {
+        const ctx = rCtx;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const baseR = Math.min(w, h) * 0.34;
+        const stretchX = extraState.activeRisk === 'myopia' ? 1.24 : 1.0;
+        const stretchY = extraState.activeRisk === 'myopia' ? 0.92 : 1.0;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        // Outer eye shape (elongates smoothly for myopia)
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, baseR * stretchX, baseR * stretchY, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inner dark cavity
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, baseR * 0.88 * stretchX, baseR * 0.88 * stretchY, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Retina lining
+        ctx.strokeStyle = extraState.activeRisk === 'diabetes' ? '#fb7185' : '#f59e0b';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, baseR * 0.84 * stretchX, baseR * 0.84 * stretchY, 0, -Math.PI * 0.7, Math.PI * 0.7);
+        ctx.stroke();
+
+        // Lens (artificial IOL glow for cataract surgery)
+        if (extraState.activeRisk === 'cataract') {
+          ctx.fillStyle = '#38bdf8';
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 12 + Math.sin(state.time * 4) * 4;
+        } else {
+          ctx.fillStyle = '#bae6fd';
+        }
+        ctx.beginPath();
+        ctx.ellipse(-baseR * 0.62 * stretchX, 0, baseR * 0.12, baseR * 0.28, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Animated vitreous liquefaction & detachment
+        const shake = extraState.activeRisk === 'trauma' ? Math.sin(state.time * 12) * 5 : Math.sin(state.time * 2) * 2;
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.26)';
+        ctx.beginPath();
+        ctx.ellipse(-baseR * 0.12 + shake, 0, baseR * 0.52 * stretchX, baseR * 0.68 * stretchY, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(186, 230, 253, 0.8)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Animated collagen floaters inside
+        for (let i = 0; i < 6; i++) {
+          const fx = Math.sin(state.time * 1.5 + i * 1.3) * baseR * 0.3 + shake;
+          const fy = Math.cos(state.time * 1.2 + i * 1.7) * baseR * 0.35;
+          ctx.fillStyle = extraState.activeRisk === 'trauma' && i < 2 ? '#fda4af' : '#cbd5e1';
+          ctx.beginPath();
+          ctx.arc(fx, fy, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Trauma impact pulse
+        if (extraState.activeRisk === 'trauma') {
+          ctx.strokeStyle = 'rgba(251, 113, 133, ' + (0.4 + 0.4 * Math.sin(state.time * 6)) + ')';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(baseR * 0.45, -baseR * 0.55, 10 + Math.sin(state.time * 6) * 4, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Label
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillText('Simulasi Faktor Risiko: ' + extraState.activeRisk.toUpperCase(), 12, 20);
+        ctx.restore();
+      }
+
+      // Draw Epidemiology Canvas
+      function drawEpiCanvas(w, h, dpr) {
+        const ctx = eCtx;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+
+        extraState.epiAnimProgress = Math.min(1, extraState.epiAnimProgress + 0.04);
+        const p = extraState.epiAnimProgress;
+
+        if (extraState.epiMode === 'age') {
+          const ageMap = { 39: 15, 50: 53, 65: 66, 75: 75 };
+          const labelMap = {
+            39: 'Usia ~39 thn: ~15% (Tahap awal di OCT)',
+            50: 'Usia > 50 thn: 53% mengalami PVD',
+            65: 'Usia 66–86 thn: 66% mengalami PVD',
+            75: 'Usia ~75 thn: ~75% PVD Komplit'
+          };
+          const targetPct = ageMap[extraState.epiAge] || 53;
+          const activeCount = Math.round(targetPct * p);
+
+          ctx.fillStyle = '#0f172a';
+          ctx.font = '700 12px Inter, sans-serif';
+          ctx.fillText(labelMap[extraState.epiAge], 14, 24);
+
+          // Draw 10x10 animated dot grid representing 100 people
+          const cols = 10;
+          const rows = 10;
+          const padX = 24;
+          const padY = 40;
+          const cellW = (w - padX * 2) / cols;
+          const cellH = (h - padY - 18) / rows;
+          const rad = Math.min(cellW, cellH) * 0.34;
+
+          let idx = 0;
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const x = padX + c * cellW + cellW * 0.5;
+              const y = padY + r * cellH + cellH * 0.5;
+              const isAffected = idx < activeCount;
+              ctx.fillStyle = isAffected ? '#0d9488' : '#cbd5e1';
+              ctx.beginPath();
+              ctx.arc(x, y, rad, 0, Math.PI * 2);
+              ctx.fill();
+              idx++;
+            }
+          }
+        } else {
+          // Animated horizontal bars for clinical stats
+          const bars = [
+            { label: 'Komunitas melihat floaters', val: 76, color: '#0d9488' },
+            { label: 'PVD pada pasien bergejala', val: 89, color: '#0284c7' },
+            { label: 'Robekan retina (+perdarahan)', val: 70, color: '#e11d48' },
+            { label: 'Robekan retina (PVD akut)', val: 15, color: '#f59e0b' },
+            { label: 'Robekan tertunda (IRIS)', val: 2.4, color: '#6366f1' }
+          ];
+          ctx.fillStyle = '#0f172a';
+          ctx.font = '700 12px Inter, sans-serif';
+          ctx.fillText('Proporsi Klinis PVD & Komplikasi (%)', 14, 22);
+
+          const startY = 44;
+          const rowH = (h - 56) / bars.length;
+          bars.forEach((b, i) => {
+            const y = startY + i * rowH;
+            ctx.fillStyle = '#334155';
+            ctx.font = '600 11px Inter, sans-serif';
+            ctx.fillText(b.label, 14, y + 10);
+
+            const barX = 14;
+            const barY = y + 16;
+            const maxW = w - 64;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillRect(barX, barY, maxW, 10);
+
+            ctx.fillStyle = b.color;
+            ctx.fillRect(barX, barY, maxW * (b.val / 100) * p, 10);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = '700 11px Inter, sans-serif';
+            ctx.fillText(b.val + '%', barX + maxW + 8, barY + 9);
+          });
+        }
+
+        ctx.restore();
+      }
+
+      // Draw Treatment Canvas (Gravity + Neuroadaptation)
+      function drawTreatmentCanvas(w, h, dpr) {
+        const ctx = tCtx;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, w, h);
+
+        // Sky-like bright patient field
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, '#e0f2fe');
+        grad.addColorStop(1, '#f8fafc');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Center crosshair / focus target
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.25)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.arc(w * 0.5, h * 0.45, 34, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#0369a1';
+        ctx.font = '600 10px Inter, sans-serif';
+        ctx.fillText('Pusat Fokus Penglihatan', w * 0.5 - 58, h * 0.45 - 40);
+
+        // Gravity offset & neuroadaptation opacity based on txPhase
+        const gravY = extraState.txPhase === 0 ? 0 : (extraState.txPhase === 1 ? h * 0.28 : h * 0.34);
+        const alpha = extraState.txPhase === 0 ? 0.75 : (extraState.txPhase === 1 ? 0.55 : 0.14);
+
+        const pts = [
+          { x: -35, y: -12, r: 6 },
+          { x: 18, y: 8, r: 8 },
+          { x: -10, y: 20, r: 5 },
+          { x: 40, y: -16, r: 7 }
+        ];
+
+        pts.forEach((pt, idx) => {
+          const px = w * 0.5 + pt.x + Math.sin(state.time * 1.4 + idx) * 6;
+          const py = h * 0.45 + pt.y + gravY + Math.cos(state.time * 1.1 + idx) * 4;
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = '#334155';
+          ctx.beginPath();
+          ctx.arc(px, py, pt.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        // Gravity arrow in Phase 1
+        if (extraState.txPhase >= 1) {
+          ctx.fillStyle = '#059669';
+          ctx.font = '600 11px Inter, sans-serif';
+          ctx.fillText(extraState.txPhase === 1 ? 'Gravitasi menarik ke bawah v' : 'Otak mengabaikan bayangan (Neuroadaptasi)', 14, 22);
+        } else {
+          ctx.fillStyle = '#0f172a';
+          ctx.font = '600 11px Inter, sans-serif';
+          ctx.fillText('Hari 1: Menghalangi pusat penglihatan', 14, 22);
+        }
+
+        ctx.restore();
+      }
+
+      // --- Init ---
+      window.onload = function () {
+        updateUI();
+        requestAnimationFrame(animate);
+      };
+    })();
+  </script>
+</body>
+</html>
