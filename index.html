@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#234e42" />
+  <meta name="description" content="Kenali mata, pahami perawatannya. Jelajahi edukasi kesehatan mata melalui animasi interaktif dan carousel yang mudah dipahami." />
+  <title>Ophtal Education — Lebih paham, lebih sayang mata.</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Langsung ke konten</a>
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#" aria-label="Ophtal Education by dr. Indra, SpM, beranda"><img src="/assets/favicon.svg" width="40" height="40" alt="" /><span>Ophtal Education<span class="brand-byline">by dr. Indra, SpM</span></span></a>
+      <button class="menu-toggle icon-button" aria-expanded="false" aria-controls="navigation" aria-label="Buka menu"><span data-icon="menu"></span></button>
+      <nav id="navigation" aria-label="Navigasi utama">
+        <a href="#" class="nav-home">Beranda</a><a href="#materi">Jelajahi edukasi</a><a href="#tentang">Tentang</a>
+        <a class="button button-small" href="#materi">Mulai belajar <span data-icon="arrow-up-right"></span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="small-line"></span> RUANG BELAJAR KESEHATAN MATA</div>
+        <h1 id="hero-title">Lebih paham,<br /> lebih <em>sayang mata.</em></h1>
+        <p>Memahami kesehatan mata tidak harus rumit. Temukan penjelasan visual yang sederhana, interaktif, dan dekat dengan keseharianmu.</p>
+        <div class="hero-actions"><a class="button" href="#materi">Jelajahi edukasi <span data-icon="arrow-right"></span></a><button class="text-button" id="hero-demo"><span class="play-circle" data-icon="play"></span> Coba animasi interaktif</button></div>
+        <div class="hero-note"><span data-icon="book-open"></span><span>Belajar sesuai ritmemu. Gratis, tanpa perlu daftar.</span></div>
+      </div>
+      <div class="hero-art" aria-label="Ilustrasi mata dengan detail iris berwarna hijau">
+        <span class="art-label"><span class="status-dot"></span> SUDUT PANDANG BARU</span>
+        <svg class="hero-eye" viewBox="0 0 560 420" aria-hidden="true">
+          <defs>
+            <radialGradient id="iris"><stop offset="0" stop-color="#477965"/><stop offset=".5" stop-color="#76a08a"/><stop offset=".86" stop-color="#a5bea4"/><stop offset="1" stop-color="#3b6958"/></radialGradient>
+            <linearGradient id="eyewhite" x2="0.5" y2="1"><stop stop-color="#fffefa"/><stop offset="1" stop-color="#e4eae0"/></linearGradient>
+            <filter id="eye-shadow"><feDropShadow dx="0" dy="15" stdDeviation="13" flood-color="#365e48" flood-opacity=".12"/></filter>
+            <clipPath id="eye-clip"><path d="M65 211Q270 15 495 211Q280 409 65 211Z"/></clipPath>
+          </defs>
+          <circle cx="280" cy="210" r="172" fill="none" stroke="#94ae91" stroke-opacity=".4" stroke-dasharray="3 7"/>
+          <circle cx="280" cy="210" r="135" fill="none" stroke="#b4c8ab" stroke-width="1"/>
+          <path d="M65 211Q270 15 495 211Q280 409 65 211Z" fill="url(#eyewhite)" filter="url(#eye-shadow)"/>
+          <g clip-path="url(#eye-clip)">
+            <circle cx="280" cy="211" r="96" fill="url(#iris)" stroke="#426c57" stroke-width="3"/>
+            <g id="iris-lines"></g>
+            <circle cx="280" cy="211" r="48" fill="#214b40"/>
+            <circle cx="280" cy="211" r="35" fill="#173c33"/>
+            <ellipse cx="253" cy="180" rx="16" ry="21" transform="rotate(35 253 180)" fill="#fff" opacity=".9"/>
+            <circle cx="302" cy="237" r="7" fill="#fff" opacity=".55"/>
+          </g>
+          <path d="M65 211Q270 15 495 211" fill="none" stroke="#355e4b" stroke-width="3" stroke-linecap="round"/>
+          <path d="M65 211Q280 409 495 211" fill="none" stroke="#6e9073" stroke-width="2"/>
+          <path d="M315 144L383 75H458" fill="none" stroke="#6c8c6b" stroke-width="1"/><circle cx="315" cy="144" r="4" fill="#3e6b53"/>
+          <text x="393" y="65" font-family="sans-serif" font-size="12" fill="#45624c">Iris mata</text>
+          <path d="M230 239L169 324H99" fill="none" stroke="#6c8c6b"/><circle cx="230" cy="239" r="4" fill="#3e6b53"/>
+
+          <path d="M468 308V328M458 318H478" stroke="#6b8b63" stroke-width="1.5"/>
+          <path d="M97 105V119M90 112H104" stroke="#6b8b63" stroke-width="1.5"/>
+        </svg>
+        <div class="art-caption"><span class="art-caption-icon" data-icon="sparkles"></span><div><strong>Kenali. Pahami. Rawat.</strong><span>Langkah kecil untuk penglihatan yang berarti.</span></div></div>
+        <span class="art-edition">01 / MENGENAL MATA</span>
+      </div>
+    </section>
+    <div class="benefit-strip"><div class="container benefits"><div><span data-icon="eye"></span><span><strong>Lebih mudah dipahami</strong>Penjelasan visual, bahasa sederhana</span></div><div><span data-icon="mouse-pointer"></span><span><strong>Bukan sekadar membaca</strong>Belajar lewat pengalaman interaktif</span></div><div><span data-icon="heart"></span><span><strong>Untukmu dan keluarga</strong>Bekal merawat mata sehari-hari</span></div></div></div>
+    <section id="materi" class="library container" aria-labelledby="library-title">
+      <div class="section-top"><div><div class="eyebrow">SEDIKIT BELAJAR, BANYAK MANFAAT</div><h2 id="library-title">Kenali matamu lebih dekat.</h2><p>Mulai dari hal yang ingin kamu pahami hari ini.</p></div><label class="search"><span data-icon="search"></span><input id="search" type="search" placeholder="Cari topik kesehatan mata…" aria-label="Cari materi edukasi" /><kbd>/</kbd></label></div>
+      <div class="library-toolbar"><div class="filters" role="group" aria-label="Filter topik"><button class="filter active" data-filter="all" aria-pressed="true">Semua topik</button><button class="filter" data-filter="dasar" aria-pressed="false">Mengenal mata</button><button class="filter" data-filter="kebiasaan" aria-pressed="false">Kebiasaan sehat</button><button class="filter" data-filter="kondisi" aria-pressed="false">Kondisi mata</button></div><span class="sample-label">KOLEKSI CONTOH</span></div>
+      <div id="materials" class="material-grid"></div>
+      <p id="results-status" class="sr-only" role="status" aria-live="polite"></p>
+      <div id="empty-state" class="empty-state" hidden><span data-icon="search"></span><h3>Topiknya belum ditemukan.</h3><p>Coba kata lain, seperti “mata”, “layar”, atau “katarak”.</p><button class="button button-small" id="reset-search">Lihat semua materi</button></div>
+      <div class="library-bottom"><p><span class="status-dot"></span> Materi di atas adalah contoh tampilan awal.</p><button id="show-more" class="text-button">Lihat semua materi <span data-icon="arrow-down"></span></button></div>
+    </section>
+    <section id="cara-belajar" class="learning-section container" aria-labelledby="learning-title">
+      <div class="learning-intro"><div class="eyebrow">CARA BARU MEMAHAMI</div><h2 id="learning-title">Lebih visual.<br /> Lebih mudah melekat.</h2><p>Pilih cara belajar yang paling nyaman untukmu. Satu tujuan: lebih mengenal kesehatan matamu.</p><a class="text-button" href="#materi">Temukan materi untukmu <span data-icon="arrow-right"></span></a></div>
+      <div class="learning-card"><div class="learning-visual interactive-visual"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="orbit-center" data-icon="mouse-pointer"></span><span class="mini-tag"><span class="status-dot"></span> Coba & pahami</span></div><div class="learning-content"><span class="step">01 / EKSPLORASI</span><h3>Animasi interaktif</h3><p>Lihat cara mata bekerja. Sentuh, geser, dan temukan penjelasannya langsung.</p></div></div>
+      <div class="learning-card"><div class="learning-visual carousel-visual"><div class="mini-slide back-one"></div><div class="mini-slide back-two"></div><div class="mini-slide front"><span>KENALI MATAMU</span><span data-icon="eye"></span><i>Satu geser,<br /> satu pemahaman.</i><b>01 — 04</b></div></div><div class="learning-content"><span class="step">02 / GESER & BELAJAR</span><h3>Carousel edukasi</h3><p>Pengetahuan dalam potongan kecil. Ringan dibaca, mudah diingat kembali.</p></div></div>
+    </section>
+    <section id="tentang" class="about container" aria-labelledby="about-title"><div class="about-mark" aria-hidden="true"><span data-icon="heart"></span><span class="about-mark-plus">+</span></div><div><div class="eyebrow">TENTANG OPHTAL EDUCATION</div><h2 id="about-title">Karena memahami adalah<br /> awal dari merawat.</h2><p>Ruang edukasi ini hadir untuk membantu pasien dan keluarga memahami kesehatan mata dengan lebih tenang. Dari mengenal bagian mata hingga kebiasaan sehari-hari, kita belajar selangkah demi selangkah.</p><div class="about-note"><span data-icon="info"></span><p>Materi di sini adalah informasi umum dan tidak menggantikan pemeriksaan atau saran dokter yang merawatmu.</p></div></div>
+      <aside class="creator-notes" aria-label="Catatan dari perancang website">
+        <div class="creator-note">
+          <span class="eyebrow">PERANCANG WEBSITE</span>
+          <p>Website ini dirancang oleh <strong>dr. Muhammad Indra Mahardika, SpM, M.Ked.Klin</strong> untuk edukasi pasien-pasiennya. Website ini dirancang secara vibecoding.</p>
+        </div>
+        <div class="creator-note">
+          <span class="eyebrow">PENDEKATAN EDUKASI</span>
+          <p>Gaya penyampaian dan gaya edukasi mungkin berbeda dengan anda, gunakan sesuai kebutuhan anda.</p>
+        </div>
+        <div class="creator-note">
+          <span class="eyebrow">SUMBER BACAAN</span>
+          <p>Saya akan mengusahakan menampilkan sumber bacaan yang saya miliki. Silahkan merujuk ke sumber bacaan untuk informasi lebih lengkap dan lebih utuh.</p>
+        </div>
+      </aside>
+    </section>
+    <section class="faq container" aria-labelledby="faq-title"><div><div class="eyebrow">SEBELUM MULAI</div><h2 id="faq-title">Mungkin kamu<br /> ingin tahu.</h2></div><div class="faq-list"><details><summary>Apakah saya perlu membuat akun?<span data-icon="plus"></span></summary><p>Tidak. Materi edukasi bisa kamu buka langsung, tanpa membuat akun dan tanpa biaya.</p></details><details><summary>Bagaimana cara menggunakan animasi interaktif?<span data-icon="plus"></span></summary><p>Pilih materi berlabel “Interaktif”, lalu ikuti petunjuk di layar. Untuk contoh yang tersedia, geser pengaturan cahaya dan amati perubahan ukuran pupil.</p></details><details><summary>Apakah informasi ini menggantikan konsultasi dokter?<span data-icon="plus"></span></summary><p>Tidak. Edukasi ini membantu memahami informasi umum. Untuk diagnosis dan perawatan sesuai kondisi matamu, tetap konsultasikan dengan dokter.</p></details></div></section>
+    <section class="closing container"><div><span class="eyebrow">MULAI DARI SATU HAL KECIL</span><h2>Matamu menemani setiap cerita.<br /> <em>Yuk, kenali lebih baik.</em></h2></div><a class="button button-light" href="#materi">Mulai jelajahi <span data-icon="arrow-up-right"></span></a><span class="closing-eye" aria-hidden="true" data-icon="eye"></span></section>
+  </main>
+  <footer class="container footer"><a class="brand" href="#"><img src="/assets/favicon.svg" width="32" height="32" alt="" /><span>ophtal<span class="brand-sub">EDUCATION</span></span></a><p>Untuk mata yang sehat. Untuk hidup yang lebih berwarna.</p><span>© <span id="year">2026</span> Ophtal Education</span></footer>
+  <dialog id="lesson-dialog" aria-labelledby="lesson-title"><div class="dialog-top"><span class="eyebrow">MATERI CONTOH · PREVIEW</span><button id="close-dialog" class="icon-button" aria-label="Tutup materi"><span data-icon="x"></span></button></div><div id="lesson-content"></div></dialog>
+</body>
+</html>
